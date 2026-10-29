@@ -1,0 +1,117 @@
+{
+  "application": {
+    "name": "PaperLens — AI-Powered Research Paper Agent",
+    "version": "1.0.0",
+    "description": "Autonomous academic research agent that ingests research papers, analyzes them across 7 core dimensions, extracts clean Mermaid.js system architecture flowcharts, and synthesizes 3 resume-ready student development projects with code starter packs.",
+    "repository": "https://github.com/shreyanayak108/Research-Paper-Agent",
+    "courseAssignment": "Assignment 1 — Vibe-Coded AI Research Agent"
+  },
+  "agentConfiguration": {
+    "primaryModel": "gemini-3.8-flash",
+    "fallbackModel": "gemini-3.1-flash-lite",
+    "highAvailabilityStrategy": "Dynamic multi-tier model failover with automatic 429 quota backoff and built-in offline benchmark exemplars",
+    "sdk": "@google/genai",
+    "promptingStrategy": "Few-Shot In-Context Learning with Structured Schema Guidance",
+    "temperature": 0.2,
+    "operationalConstraints": {
+      "maxTokenBudget": 25000,
+      "summaryWordLimit": 300,
+      "responseMimeType": "application/json"
+    },
+    "fewShotDemonstrations": [
+      {
+        "id": "demonstration-1",
+        "domain": "Parameter-Efficient Fine-Tuning (PEFT)",
+        "paperTitle": "LoRA: Low-Rank Adaptation of Large Language Models",
+        "arxivId": "2106.09685",
+        "focus": "Weight decomposition matrices, memory reduction, zero inference latency, adapter merging"
+      },
+      {
+        "id": "demonstration-2",
+        "domain": "Hardware-Aware Deep Learning / Systems",
+        "paperTitle": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+        "arxivId": "2205.14135",
+        "focus": "GPU SRAM block tiling, online softmax normalization, IO complexity, CUDA kernel optimizations"
+      }
+    ],
+    "sevenAnalysisDimensions": [
+      {
+        "id": "objective",
+        "name": "Research Objective",
+        "description": "The primary research goal or scientific thesis investigated by the authors."
+      },
+      {
+        "id": "problemStatement",
+        "name": "Problem Statement",
+        "description": "The foundational computational bottleneck, theoretical impasse, or memory scaling problem addressed."
+      },
+      {
+        "id": "primaryMethodology",
+        "name": "Primary Methodology",
+        "description": "The concrete algorithmic, architectural, or mathematical formulation introduced."
+      },
+      {
+        "id": "keyFindings",
+        "name": "Key Findings",
+        "description": "Empirical and theoretical benchmark results explicitly validated in the publication."
+      },
+      {
+        "id": "limitations",
+        "name": "Limitations",
+        "description": "Failure modes, environmental assumptions, or architectural boundaries explicitly acknowledged by the authors."
+      },
+      {
+        "id": "researchGaps",
+        "name": "Possible Research Gaps",
+        "description": "Unexplored domains, extreme scale scenarios, or modality combinations open for subsequent investigation."
+      },
+      {
+        "id": "futureDirections",
+        "name": "Future Research Directions",
+        "description": "Promising theoretical and engineering trajectories highlighted for future exploration."
+      }
+    ],
+    "outputSpecifications": {
+      "fullSummary": {
+        "format": "Plain, accessible academic language",
+        "constraint": "Strictly under 300 words"
+      },
+      "architectureFlowchart": {
+        "engine": "Mermaid.js",
+        "syntax": "graph TD",
+        "outputMarker": "[FLOWCHART]",
+        "requirements": "Explicitly charts inputs, parameter transformations, hardware memory hierarchies, and model outputs without markdown fences inside the string."
+      },
+      "studentDevelopmentOpportunities": {
+        "count": 3,
+        "targetAudience": "3rd-year CS university students",
+        "requiredFields": [
+          "title",
+          "exactExtension",
+          "targetedPerformanceMetric",
+          "recommendedTechStack",
+          "resumeBulletPoint",
+          "feasibilityWeeks",
+          "difficultyLevel",
+          "roadmap"
+        ]
+      }
+    },
+    "provenanceAndIntegrityGuard": {
+      "rule": "Strict distinction between paper-stated facts and agent proposals.",
+      "explicitFactsTag": "[Explicit from Paper]",
+      "inferredGapsTag": "[Identified Gap]",
+      "proposalsTag": "[Proposed Direction]",
+      "zeroHallucinationPolicy": "Never invent paper authors, benchmarks, or citations. Missing abstracts are transparently flagged as unavailable in the context."
+    },
+    "cachingAndPerformance": {
+      "sessionCache": "Client-side and server-side in-memory hash maps (24-hour TTL)",
+      "arxivMetadataCache": "Automatic memoization of arXiv XML responses to prevent rate limits",
+      "concurrencyProtection": "Monotonic request IDs with AbortController cancellation for stale response rejection"
+    },
+    "security": {
+      "keyStorage": "Strictly server-side environment variable (GEMINI_API_KEY)",
+      "clientExclusion": "No API keys are exposed to the browser or bundled client-side."
+    }
+  }
+}

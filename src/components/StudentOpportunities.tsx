@@ -13,7 +13,8 @@ import {
   FileCode,
   Layers,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  AlertCircle
 } from 'lucide-react';
 import { StudentOpportunity, StarterPack } from '../types/research';
 
@@ -31,6 +32,8 @@ export const StudentOpportunities: React.FC<StudentOpportunitiesProps> = ({
   const [copiedBulletIdx, setCopiedBulletIdx] = useState<number | null>(null);
   const [loadingCodeIdx, setLoadingCodeIdx] = useState<number | null>(null);
   const [expandedRoadmapIdx, setExpandedRoadmapIdx] = useState<number | null>(0);
+  const [generatorError, setGeneratorError] = useState<string | null>(null);
+  const starterPackCacheRef = React.useRef<Map<string, StarterPack>>(new Map());
 
   const handleCopyBullet = async (bullet: string, idx: number) => {
     await navigator.clipboard.writeText(bullet);
@@ -39,8 +42,15 @@ export const StudentOpportunities: React.FC<StudentOpportunitiesProps> = ({
   };
 
   const handleGenerateStarterPack = async (opp: StudentOpportunity, idx: number) => {
+    const cacheKey = `${paperTitle}:${opp.title}:${opp.exactExtension}`;
+    if (starterPackCacheRef.current.has(cacheKey)) {
+      onOpenStarterPack(starterPackCacheRef.current.get(cacheKey)!, opp.title);
+      return;
+    }
+
     try {
       setLoadingCodeIdx(idx);
+      setGeneratorError(null);
       const res = await fetch('/api/generate-starter-pack', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -52,16 +62,31 @@ export const StudentOpportunities: React.FC<StudentOpportunitiesProps> = ({
         }),
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to generate starter boilerplate');
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const rawText = await res.text().catch(() => '');
+        const isHtml = rawText.includes('<html') || rawText.includes('<!doctype');
+        if (isHtml) {
+          throw new Error(
+            `Server returned an HTML page (HTTP ${res.status}) instead of JSON. The backend service may be busy or timed out.`
+          );
+        }
+        throw new Error(
+          `Unexpected server response (${res.status}): ${rawText.slice(0, 100) || 'Non-JSON response'}`
+        );
       }
 
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to generate starter boilerplate');
+      }
+
       if (data.starterPack) {
+        starterPackCacheRef.current.set(cacheKey, data.starterPack);
         onOpenStarterPack(data.starterPack, opp.title);
       }
     } catch (err: any) {
-      alert(err.message || 'Error generating starter code');
+      setGeneratorError(err?.message || 'Error generating starter code');
     } finally {
       setLoadingCodeIdx(null);
     }
@@ -98,6 +123,21 @@ export const StudentOpportunities: React.FC<StudentOpportunitiesProps> = ({
 
       {/* 3 Project Opportunities Cards */}
       <div className="p-6 space-y-6">
+        {generatorError && (
+          <div className="p-4 bg-red-950/40 border border-red-800/80 rounded-xl flex items-center justify-between text-xs text-red-200">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              <span>{generatorError}</span>
+            </div>
+            <button
+              onClick={() => setGeneratorError(null)}
+              className="px-2 py-0.5 bg-red-900/60 hover:bg-red-800 text-red-300 rounded text-[11px]"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {opportunities.map((opp, idx) => {
             const isRoadmapOpen = expandedRoadmapIdx === idx;

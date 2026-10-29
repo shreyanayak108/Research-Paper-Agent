@@ -18,14 +18,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRawOutput, hasAnalysis }) 
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-base font-bold text-slate-100 tracking-tight">
-                PaperAgent
+                PaperLens
               </h1>
               <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 border border-blue-800/80">
-                CS RESEARCH AGENT
+                AI RESEARCH AGENT
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
-              System Architecture Extractor & Student Opportunities Engine
+              AI-Powered Research Paper Agent & System Architecture Engine
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 {
-  "name": "PaperAgent - CS Research & System Architecture Engine",
-  "description": "Advanced CS Research Agent parsing academic papers, extracting system architecture flowcharts in Mermaid.js, and generating resume-ready student development projects.",
+  "name": "PaperLens — AI-Powered Research Paper Agent",
+  "description": "PaperLens: Advanced CS Research Agent powered by Gemini 3.8 Flash with few-shot prompting, 7-dimension academic analysis, interactive Mermaid.js architecture flowcharts, and resume-ready student development projects.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

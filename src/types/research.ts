@@ -18,9 +18,15 @@ export interface PaperDetails {
 }
 
 export interface CoreConceptExtraction {
+  objective?: string;
   problemStatement: string;
   primaryMethodology: string;
+  keyFindings?: string;
   keyBreakthroughs: string;
+  limitations?: string;
+  researchGaps?: string;
+  futureDirections?: string;
+  provenanceNote?: string;
   fullSummary: string;
   wordCount?: number;
 }
@@ -79,6 +85,7 @@ export interface AnalysisResponse {
     authors: string;
     url: string;
   };
+  fromCache?: boolean;
 }
 
 export interface StarterPack {

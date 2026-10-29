@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, BookOpen, User, Calendar, Tag, Github } from 'lucide-react';
+import { ExternalLink, BookOpen, User, Calendar, Tag, Github, Zap, RefreshCw } from 'lucide-react';
 import { PaperDetails } from '../types/research';
 
 interface PaperMetadataCardProps {
@@ -12,11 +12,15 @@ interface PaperMetadataCardProps {
     authors: string;
     url: string;
   };
+  fromCache?: boolean;
+  onRefresh?: () => void;
 }
 
 export const PaperMetadataCard: React.FC<PaperMetadataCardProps> = ({
   paperDetails,
   arxivMetadata,
+  fromCache,
+  onRefresh,
 }) => {
   const displayTitle = paperDetails.title || arxivMetadata?.title || 'Academic Research Paper';
   const displayAuthors = paperDetails.authors || arxivMetadata?.authors || 'Academic Research Team';
@@ -36,6 +40,12 @@ export const PaperMetadataCard: React.FC<PaperMetadataCardProps> = ({
               {paperDetails.primaryDomain}
             </span>
           )}
+          {fromCache && (
+            <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-950/80 text-emerald-300 font-mono text-[11px] rounded border border-emerald-800/60">
+              <Zap className="w-3 h-3 text-emerald-400" />
+              Instant Session Hit
+            </span>
+          )}
           <span className="flex items-center gap-1 text-slate-400 text-xs">
             <Calendar className="w-3 h-3 text-slate-500" />
             {displayYear}
@@ -53,6 +63,17 @@ export const PaperMetadataCard: React.FC<PaperMetadataCardProps> = ({
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        {onRefresh && (
+          <button
+            type="button"
+            onClick={onRefresh}
+            title="Re-run analysis to bypass cache"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium border border-slate-700 transition cursor-pointer"
+          >
+            <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+            <span>Re-analyze</span>
+          </button>
+        )}
         {arxivMetadata?.url && (
           <a
             href={arxivMetadata.url}
